@@ -157,6 +157,11 @@ export class AuthController {
     );
   }
 
+  static async loadRefreshTokensToMem(): Promise<void> {
+    const tokens = await RefreshTokenModel.findAll({attributes: ["token"]});
+    this.activeRefreshTokens = tokens.map(model => model.getDataValue("token"));
+  }
+
   private static generateAccessToken(userId: string) {
     return jwt.sign({ id: userId }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: "1h",
