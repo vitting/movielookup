@@ -1,5 +1,6 @@
 import csv from "csvtojson";
 import path from "path";
+import colors from "colors";
 import { db, MovieModel } from "./db";
 import { Movie } from "./interfaces/movie";
 
@@ -12,6 +13,7 @@ import { Movie } from "./interfaces/movie";
   );
 
   try {
+    console.log(colors.black.bgGreen("Import started"));
     const data = await csv().fromFile(pathToCsv);
 
     const dbData: Movie[] = data.map<Movie>((movie) => {
@@ -25,8 +27,11 @@ import { Movie } from "./interfaces/movie";
         year: movie.Year as number,
       };
     });
-    
+
     await MovieModel.bulkCreate(dbData);
+    console.log(
+      colors.black.bgGreen("Import ended. Elements importet: " + dbData.length)
+    );
   } catch (error) {
     console.error(error);
   }

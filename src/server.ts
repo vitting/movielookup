@@ -23,14 +23,16 @@ dotenv.config();
         const answer: { dropdb: string } = await prompt({
           type: "input",
           name: "dropdb",
-          message: colors.bold.white.bgRed("All database data will be dropped. Type YES to continue: ")
+          message: colors.bold.white.bgRed(
+            "All database data will be dropped. Type YES to continue: "
+          ),
         });
-        
+
         if (!answer.dropdb.includes("YES")) {
           process.exit();
         }
       }
-    
+
       console.log(colors.black.bgGreen("   Database sync started   "));
 
       await db.sync({ force: process.argv.includes("--dbsyncall") });
