@@ -3,9 +3,8 @@ import dotenv from "dotenv";
 import { authRouter, movieRouter } from "./routes";
 import { db } from "./db";
 import { dbToken } from "./db_tokens";
-import jwtexpress from "express-jwt";
 import authMiddleware from "./middlewares/auth_middleware";
-
+import colors from "colors";
 dotenv.config();
 
 (async function() {
@@ -22,6 +21,6 @@ dotenv.config();
   
   
   app.listen(port, () => {
-    console.log(`server listening at http://localhost:${port}`);
+    console.log("server listening at " + colors.yellow(`http://localhost:${port}`));
   });
 }) ()
