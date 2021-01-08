@@ -8,7 +8,7 @@ dotenv.config();
 const db = new Sequelize({
   dialect: "sqlite",
   storage: process.env.DATABASE_PATH,
-  logging: false
+  logging: process.argv.includes("--dev")
 });
 
 const UserModel = initUserModel(db);

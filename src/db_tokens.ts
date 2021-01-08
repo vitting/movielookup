@@ -7,7 +7,7 @@ dotenv.config();
 const db = new Sequelize({
   dialect: "sqlite",
   storage: process.env.TOKENS_DATABASE_PATH,
-  logging: true
+  logging: process.argv.includes("--dev")
 });
 
 const RefreshTokenModel = initRefreshTokenModel(db);
