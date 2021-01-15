@@ -2,6 +2,7 @@ import { Request } from "express"
 
 interface Auth {
     id: string;
+    name: string;
     iat: number;
     exp: number;
 }

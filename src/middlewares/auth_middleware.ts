@@ -27,7 +27,9 @@ export default function authMiddleware(
     const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!, {
       algorithms: ["HS256"],
     });
+
     set(req, "auth", payload);
+    
   } catch (error) {
     return res.status(401).json({ error: "Token not valid" });
   }

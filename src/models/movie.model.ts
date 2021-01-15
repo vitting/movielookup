@@ -36,6 +36,25 @@ export function initMovieModel(db: Sequelize) {
     posterUrl: {
         type: DataTypes.STRING(2000),
         allowNull: true
+    },
+    runtime: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    actors: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: ""
+    },
+    plot: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: ""
+    },
+    averageRating: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
     }
   }, {
       sequelize: db,

@@ -7,6 +7,11 @@ export interface Movie {
     language: string;
     country: string;
     posterUrl: string;
+    runtime: number;
+    actors: string;
+    plot: string;
+    averageRating: number;
+    userRating?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }

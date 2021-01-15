@@ -42,6 +42,7 @@ export class AuthController {
     }
 
     const userFromDb = result.toJSON() as User;
+
     const validPwd = await bcrypt.compare(user.password, userFromDb.password);
 
     if (!validPwd) {
@@ -51,8 +52,8 @@ export class AuthController {
       return;
     }
 
-    const jwtAccessToken = AuthController.generateAccessToken(userFromDb.id!);
-    const jwtRefreshToken = AuthController.generateRefreshToken(userFromDb.id!);
+    const jwtAccessToken = AuthController.generateAccessToken(userFromDb.id!, userFromDb.name);
+    const jwtRefreshToken = AuthController.generateRefreshToken(userFromDb.id!, userFromDb.name);
 
     const currentToken = await RefreshTokenModel.findByPk(userFromDb.id);
     if (currentToken) {
@@ -150,26 +151,28 @@ export class AuthController {
           return res.sendStatus(403);
         }
 
-        const data = payload as { id: string };
-        const accessToken = AuthController.generateAccessToken(data.id);
+        const data = payload as { id: string, name: string };
+        const accessToken = AuthController.generateAccessToken(data.id, data.name);
         return res.json({ accessToken });
       }
     );
   }
 
   static async loadRefreshTokensToMem(): Promise<void> {
-    const tokens = await RefreshTokenModel.findAll({attributes: ["token"]});
-    this.activeRefreshTokens = tokens.map(model => model.getDataValue("token"));
+    const tokens = await RefreshTokenModel.findAll({ attributes: ["token"] });
+    this.activeRefreshTokens = tokens.map((model) =>
+      model.getDataValue("token")
+    );
   }
 
-  private static generateAccessToken(userId: string) {
-    return jwt.sign({ id: userId }, process.env.ACCESS_TOKEN_SECRET!, {
+  private static generateAccessToken(userId: string, name: string) {
+    return jwt.sign({ id: userId, name }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: "1h",
     });
   }
 
-  private static generateRefreshToken(userId: string) {
-    return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET!);
+  private static generateRefreshToken(userId: string, name: string) {
+    return jwt.sign({ id: userId, name }, process.env.REFRESH_TOKEN_SECRET!);
   }
 
   private static removeTokenFromMem(jwtRefreshToken: string) {

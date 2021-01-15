@@ -1,9 +1,18 @@
 import { Request, Response } from "express";
-import { MovieModel } from "../db";
+import { MovieModel, MovieReviewModel } from "../db";
+import { MovieRatingModel } from "../db";
+import joi from "joi";
 import { Op } from "sequelize";
 import movieReqParamsSchema from "../validators/movie_req_params.validator";
 import movieReqSearchParamsSchema from "../validators/movie_req_search_params.validator";
 import { MovieRequestParams } from "../interfaces/movie_request_params.interface";
+import { AuthRequest } from "../interfaces/auth_request.interface";
+import { Movie } from "../interfaces/movie";
+import { MovieRating } from "../interfaces/movie_rating.interface";
+import movieRatingSchema from "../validators/movie_rating.validator";
+import movieReviewSchema from "../validators/movie_review.validator";
+import { MovieReview } from "../interfaces/movie_review.interface";
+
 export class MovieController {
   static async moviesAll(req: Request, res: Response) {
     const qparams = req.query;
@@ -64,9 +73,148 @@ export class MovieController {
   }
 
   static async movie(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
     const id = req.params.id;
+    const userId = authReq.auth.id;
     const movie = await MovieModel.findByPk(id);
+    let movieResult: Movie | null = null;
 
-    res.json(movie?.toJSON());
+    if (movie) {
+      movieResult = movie.toJSON() as Movie;
+      const userRating = await MovieRatingModel.findOne({
+        where: { movieId: id, userId },
+      });
+
+      movieResult.userRating = userRating
+        ? (userRating.get("rating") as number)
+        : 0;
+    }
+
+    res.json(movieResult);
+  }
+
+  static async setMovieRating(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
+    const userId = authReq.auth.id;
+
+    const body = req.body;
+    const { error, value } = movieRatingSchema.validate(body);
+    if (error) {
+      res.status(404).json({ error: "Invalid data supplied" });
+      return;
+    }
+
+    const movieRatingData: MovieRating = value as MovieRating;
+    movieRatingData.userId = userId;
+
+    const rating = await MovieRatingModel.findOne({
+      where: {
+        userId,
+        movieId: movieRatingData.movieId,
+      },
+    });
+
+    if (rating) {
+      rating.set("rating", movieRatingData.rating);
+      await rating.save();
+    } else {
+      await MovieRatingModel.create(movieRatingData);
+    }
+
+    res.json({ message: "Rating saved" });
+  }
+
+  static async setMovieReview(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
+    const { id, name } = authReq.auth;
+    const body = req.body;
+    const { error, value } = movieReviewSchema.validate(body);
+    if (error) {
+      res.status(404).json({ error: "Invalid data supplied" });
+      return;
+    }
+
+    const movieReviewData: MovieReview = value as MovieReview;
+    movieReviewData.userId = id;
+    movieReviewData.nameOfReviewer = name;
+
+    await MovieReviewModel.create(movieReviewData);
+    res.json({ message: "Review saved" });
+  }
+
+  static async updateMovieReview(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
+    const userId = authReq.auth.id;
+    const reviewId = req.params.id;
+    const body = req.body;
+
+    const { error, value } = movieReviewSchema.validate(body);
+    console.log(error);
+    if (error) {
+      res.status(404).json({ error: "Invalid data supplied" });
+      return;
+    }
+
+    const movieReviewData: MovieReview = value as MovieReview;
+    const review = await MovieReviewModel.findOne({
+      where: {
+        id: reviewId,
+        movieId: movieReviewData.movieId,
+        userId,
+      },
+    });
+
+    if (!review) {
+      res.status(404).json({ error: "Review not found" });
+      return;
+    }
+
+    review.set("title", movieReviewData.title);
+    review.set("review", movieReviewData.review);
+    await review.save();
+
+    res.json({ message: "Review updated" });
+  }
+
+  static async getMovieReview(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
+    const reviewId = req.params.id;
+    const userId = authReq.auth.id;
+
+    const result = await MovieReviewModel.findOne({
+      where: {
+        id: reviewId,
+        userId,
+      },
+    });
+
+    return res.json(result?.toJSON());
+  }
+
+  static async getMovieReviewsForUser(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
+    const userId = authReq.auth.id;
+
+    const result = await MovieReviewModel.findAll({
+      where: {
+        userId,
+      },
+      order: [["createdAt", "ASC"]],
+    });
+
+    res.json(result.map((review) => review.toJSON()));
+  }
+
+  static async getMovieReviewsForMovie(req: Request, res: Response) {
+    const movieId = req.params.id;
+
+    const result = await MovieReviewModel.findAll({
+      where: {
+        movieId,
+      },
+      order: [["createdAt", "ASC"]],
+    });
+
+    res.json(result.map((review) => review.toJSON()));
   }
 }

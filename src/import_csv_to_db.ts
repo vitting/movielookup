@@ -17,6 +17,11 @@ import { Movie } from "./interfaces/movie";
     const data = await csv().fromFile(pathToCsv);
 
     const dbData: Movie[] = data.map<Movie>((movie) => {
+      let runtimeText = movie.Runtime as string;
+      const runtime = parseInt(runtimeText.split(" ")[0]) || 0;
+
+      
+      
       return {
         title: movie.Title as string,
         country: movie.Country as string,
@@ -25,6 +30,10 @@ import { Movie } from "./interfaces/movie";
         language: movie.Language as string,
         posterUrl: movie.Poster as string,
         year: movie.Year as number,
+        runtime,
+        actors: movie.Actors as string,
+        plot: movie.Plot as string,
+        averageRating: 0
       };
     });
 

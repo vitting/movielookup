@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import { authRouter, movieRouter } from "./routes";
+import { authRouter, movieRouter, viewRouter } from "./routes";
 import { db } from "./db";
 import { dbToken } from "./db_tokens";
 import authMiddleware from "./middlewares/auth_middleware";
@@ -45,9 +45,11 @@ dotenv.config();
   }
 
   await AuthController.loadRefreshTokensToMem();
-
+  app.set("view engine", "ejs");
+  app.set("views", "./src/views");
   app.use(express.json());
-
+  
+  app.use("/api/v1", viewRouter);
   app.use("/api/v1", authRouter);
   app.use("/api/v1", authMiddleware, movieRouter);
 
