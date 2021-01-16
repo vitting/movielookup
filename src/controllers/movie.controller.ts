@@ -1,15 +1,12 @@
 import { Request, Response } from "express";
 import { MovieModel, MovieReviewModel } from "../db";
 import { MovieRatingModel } from "../db";
-import joi from "joi";
 import { Op } from "sequelize";
 import movieReqParamsSchema from "../validators/movie_req_params.validator";
 import movieReqSearchParamsSchema from "../validators/movie_req_search_params.validator";
 import { MovieRequestParams } from "../interfaces/movie_request_params.interface";
 import { AuthRequest } from "../interfaces/auth_request.interface";
 import { Movie } from "../interfaces/movie";
-import { MovieRating } from "../interfaces/movie_rating.interface";
-import movieRatingSchema from "../validators/movie_rating.validator";
 import movieReviewSchema from "../validators/movie_review.validator";
 import { MovieReview } from "../interfaces/movie_review.interface";
 

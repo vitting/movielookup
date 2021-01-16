@@ -9,8 +9,6 @@ import { UserModel } from "../db";
 import { RefreshTokenModel } from "../db_tokens";
 import userLoginSchema from "../validators/user_login.validator";
 import { UserLogin } from "../interfaces/user_login";
-import refreshTokenSchema from "../validators/refresh_token.validator";
-import { Refreshtoken } from "../interfaces/refresh_token";
 import { AuthRequest } from "../interfaces/auth_request.interface";
 
 dotenv.config();
