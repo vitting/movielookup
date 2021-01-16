@@ -14,7 +14,7 @@ import movieReviewSchema from "../validators/movie_review.validator";
 import { MovieReview } from "../interfaces/movie_review.interface";
 
 export class MovieController {
-  static async moviesAll(req: Request, res: Response) {
+  static async getAllMovies(req: Request, res: Response) {
     const qparams = req.query;
     const { error, value } = movieReqParamsSchema.validate(qparams);
 
@@ -35,7 +35,7 @@ export class MovieController {
     );
   }
 
-  static async movieSearch(req: Request, res: Response) {
+  static async getMovieBySearch(req: Request, res: Response) {
     const qparams = req.query;
     const { error, value } = movieReqSearchParamsSchema.validate(qparams);
 
@@ -72,7 +72,7 @@ export class MovieController {
     );
   }
 
-  static async movie(req: Request, res: Response) {
+  static async getMovie(req: Request, res: Response) {
     const authReq = req as AuthRequest;
     const id = req.params.id;
     const userId = authReq.auth.id;
@@ -124,7 +124,7 @@ export class MovieController {
     res.json({ message: "Rating saved" });
   }
 
-  static async setMovieReview(req: Request, res: Response) {
+  static async createMovieReview(req: Request, res: Response) {
     const authReq = req as AuthRequest;
     const { id, name } = authReq.auth;
     const body = req.body;

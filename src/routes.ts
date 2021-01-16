@@ -8,9 +8,10 @@ const authRouter = express.Router();
 const viewRouter = express.Router();
 
 viewRouter.get("/", ViewController.apiOverview);
-movieRouter.get("/movies/all", MovieController.moviesAll);
 
-movieRouter.get("/movies/search", MovieController.movieSearch);
+movieRouter.get("/movies/all", MovieController.getAllMovies);
+
+movieRouter.get("/movies/search", MovieController.getMovieBySearch);
 
 movieRouter.post("/movies/rating", MovieController.setMovieRating);
 
@@ -20,11 +21,11 @@ movieRouter.get("/movies/:id/reviews", MovieController.getMovieReviewsForMovie);
 
 movieRouter.get("/movies/reviews/:id", MovieController.getMovieReview);
 
-movieRouter.post("/movies/reviews", MovieController.setMovieReview);
+movieRouter.post("/movies/reviews", MovieController.createMovieReview);
 
 movieRouter.put("/movies/reviews/:id", MovieController.updateMovieReview);
 
-movieRouter.get("/movies/:id", MovieController.movie);
+movieRouter.get("/movies/:id", MovieController.getMovie);
 
 authRouter.post("/login", AuthController.login);
 
