@@ -6,5 +6,5 @@ export interface MovieReview {
   nameOfReviewer?: string;
   title: string;
   review: string;
-  movieId: string;
+  movieId?: string;
 }

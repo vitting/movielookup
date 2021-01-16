@@ -1,14 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/reset.css" />
+    <link rel="stylesheet" href="/static/app.css" />
     <title>Api overview</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Api V1 overview</h1>
     <ul>
-        <li></li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Get all movies</div>
+          <div class="http-type http-type-get">GET</div>
+          <div class="api-path">/api/v1/movies/all</div>
+          <div class="params-block">
+            <code>
+              <h3>Properties:</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                    <th>Optional</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>limit</td>
+                    <td>100</td>
+                    <td>Number of movies to return</td>
+                    <td>yes</td>
+                  </tr>
+                  <tr>
+                    <td>offset</td>
+                    <td>0</td>
+                    <td>Offset of movies to return</td>
+                    <td>yes</td>
+                  </tr>
+                  <tr>
+                    <td>order</td>
+                    <td>asc</td>
+                    <td>Order of movie titles asc/desc</td>
+                    <td>yes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </code>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Search movies</div>
+          <div class="http-type http-type-get">GET</div>
+          <div class="api-path">/api/v1/movies/search</div>
+          <div class="params-block">
+            <code>
+              <h3>Properties:</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                    <th>Optional</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>query</td>
+                    <td></td>
+                    <td>Search string. Searching in titles and directors</td>
+                    <td>no</td>
+                  </tr>
+                  <tr>
+                    <td>limit</td>
+                    <td>100</td>
+                    <td>Number of movies to return</td>
+                    <td>yes</td>
+                  </tr>
+                  <tr>
+                    <td>offset</td>
+                    <td>0</td>
+                    <td>Offset of movies to return</td>
+                    <td>yes</td>
+                  </tr>
+                  <tr>
+                    <td>order</td>
+                    <td>asc</td>
+                    <td>Order of movie titles asc/desc</td>
+                    <td>yes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </code>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Get single movie by movie id</div>
+          <div class="http-type http-type-get">GET</div>
+          <div class="api-path">
+            /api/v1/movies/<span class="api-param">[movie id]</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Set rating for a movie</div>
+          <div class="http-type http-type-post">POST</div>
+          <div class="api-path">
+            /api/v1/movies/<span class="api-param">[movie id]</span
+            >/rating/<span class="api-param">[rating]</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Get all reviews written by user</div>
+          <div class="http-type http-type-get">GET</div>
+          <div class="api-path">/api/v1/movies/reviews</div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Get all reviews for a movie</div>
+          <div class="http-type http-type-get">GET</div>
+          <div class="api-path">
+            /api/v1/movies/<span class="api-param">[movie id]</span>/reviews
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Get a review by id</div>
+          <div class="http-type http-type-get">GET</div>
+          <div class="api-path">
+            /api/v1/movies/reviews/<span class="api-param">[review id]</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Create a new review for a movie</div>
+          <div class="http-type http-type-post">POST</div>
+          <div class="api-path">
+            /api/v1/movies/<span class="api-param">[movie id]</span>/reviews
+          </div>
+          <div class="params-block">
+          <code>
+            <div>body parameters:</div>
+            <div class="bracket">{</div>
+            <div class="body-param">
+              title: <span class="body-param-desc">[review title]</span>
+            </div>
+            <div class="body-param">review: <span class="body-param-desc">[review text]</span></div>
+            <div class="bracket">}</div>
+          </code>
+        </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Update a review for a movie</div>
+          <div class="http-type http-type-put">PUT</div>
+          <div class="api-path">
+            /api/v1/movies/<span class="api-param">[movie id]</span
+            >/reviews/<span class="api-param">[review id]</span>
+          </div>
+          <div class="params-block">
+          <code>
+            <div>body parameters:</div>
+            <div class="bracket">{</div>
+            <div class="body-param">
+              title: <span class="body-param-desc">[review title]</span>
+            </div>
+            <div class="body-param">
+              review: <span class="body-param-desc">[review text]</span>
+            </div>
+            <div class="bracket">}</div>
+          </code>
+        </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">User registration</div>
+          <div class="http-type http-type-post">POST</div>
+          <div class="api-path">
+            /api/v1/register
+          </div>
+          <div class="params-block">
+          <code>
+            <div>body parameters:</div>
+            <div class="bracket">{</div>
+            <div class="body-param">
+              name: <span class="body-param-desc">[name of user]</span>
+            </div>
+            <div class="body-param">
+              email: <span class="body-param-desc">[user e-mail]</span>
+            </div>
+            <div class="body-param">
+              password: <span class="body-param-desc">[user password]</span>
+            </div>
+            <div class="bracket">}</div>
+          </code>
+        </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">User login</div>
+          <div class="http-type http-type-post">POST</div>
+          <div class="api-path">
+            /api/v1/login
+          </div>
+          <div class="params-block">
+          <code>
+            <div>body parameters:</div>
+            <div class="bracket">{</div>
+            <div class="body-param">
+              email: <span class="body-param-desc">[user e-mail]</span>
+            </div>
+            <div class="body-param">
+              password: <span class="body-param-desc">[user password]</span>
+            </div>
+            <div class="bracket">}</div>
+          </code>
+        </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">User logout</div>
+          <div class="http-type http-type-post">POST</div>
+          <div class="api-path">
+            /api/v1/logout
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="api-block">
+          <div class="api-description">Refresh access token</div>
+          <div class="http-type http-type-get">GET</div>
+          <div class="api-path">
+            /api/v1/token/<span class="api-param">[refresh token]</span>
+          </div>
+        </div>
+      </li>
     </ul>
-</body>
+  </body>
 </html>

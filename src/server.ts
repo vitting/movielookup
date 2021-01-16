@@ -7,6 +7,7 @@ import authMiddleware from "./middlewares/auth_middleware";
 import colors from "colors";
 import { AuthController } from "./controllers/auth.controller";
 import { prompt } from "enquirer";
+import path from "path";
 
 dotenv.config();
 
@@ -47,8 +48,9 @@ dotenv.config();
   await AuthController.loadRefreshTokensToMem();
   app.set("view engine", "ejs");
   app.set("views", "./src/views");
+  app.use('/static', express.static(path.join(__dirname, 'public')))
   app.use(express.json());
-  
+    
   app.use("/api/v1", viewRouter);
   app.use("/api/v1", authRouter);
   app.use("/api/v1", authMiddleware, movieRouter);

@@ -52,8 +52,14 @@ export class AuthController {
       return;
     }
 
-    const jwtAccessToken = AuthController.generateAccessToken(userFromDb.id!, userFromDb.name);
-    const jwtRefreshToken = AuthController.generateRefreshToken(userFromDb.id!, userFromDb.name);
+    const jwtAccessToken = AuthController.generateAccessToken(
+      userFromDb.id!,
+      userFromDb.name
+    );
+    const jwtRefreshToken = AuthController.generateRefreshToken(
+      userFromDb.id!,
+      userFromDb.name
+    );
 
     const currentToken = await RefreshTokenModel.findByPk(userFromDb.id);
     if (currentToken) {
@@ -127,32 +133,25 @@ export class AuthController {
   }
 
   static token(req: Request, res: Response) {
-    const body = req.body;
-    const { error, value } = refreshTokenSchema.validate(body);
+    const refreshToken = req.params.refreshToken;
 
-    if (error) {
-      res.status(404).json({ error: "Invalid data supplied" });
-      return;
-    }
-
-    const refreshToken: Refreshtoken = value as Refreshtoken;
-
-    if (
-      !AuthController.activeRefreshTokens.includes(refreshToken.refreshToken)
-    ) {
+    if (!AuthController.activeRefreshTokens.includes(refreshToken)) {
       return res.sendStatus(403);
     }
 
     jwt.verify(
-      refreshToken.refreshToken,
+      refreshToken,
       process.env.REFRESH_TOKEN_SECRET!,
       (err, payload) => {
         if (err) {
           return res.sendStatus(403);
         }
 
-        const data = payload as { id: string, name: string };
-        const accessToken = AuthController.generateAccessToken(data.id, data.name);
+        const data = payload as { id: string; name: string };
+        const accessToken = AuthController.generateAccessToken(
+          data.id,
+          data.name
+        );
         return res.json({ accessToken });
       }
     );

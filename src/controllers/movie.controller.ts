@@ -96,29 +96,33 @@ export class MovieController {
   static async setMovieRating(req: Request, res: Response) {
     const authReq = req as AuthRequest;
     const userId = authReq.auth.id;
+    const movieId = req.params.id;
+    let rating = 0;
+    if (Number.isInteger(parseInt(req.params.rating))) {
+      rating = parseInt(req.params.rating);
+    }
 
-    const body = req.body;
-    const { error, value } = movieRatingSchema.validate(body);
-    if (error) {
+    if ((!movieId && rating < 0) || rating > 10) {
       res.status(404).json({ error: "Invalid data supplied" });
       return;
     }
 
-    const movieRatingData: MovieRating = value as MovieRating;
-    movieRatingData.userId = userId;
-
-    const rating = await MovieRatingModel.findOne({
+    const result = await MovieRatingModel.findOne({
       where: {
         userId,
-        movieId: movieRatingData.movieId,
+        movieId,
       },
     });
 
-    if (rating) {
-      rating.set("rating", movieRatingData.rating);
-      await rating.save();
+    if (result) {
+      result.set("rating", rating);
+      await result.save();
     } else {
-      await MovieRatingModel.create(movieRatingData);
+      await MovieRatingModel.create({
+        rating,
+        movieId,
+        userId,
+      });
     }
 
     res.json({ message: "Rating saved" });
@@ -127,6 +131,7 @@ export class MovieController {
   static async createMovieReview(req: Request, res: Response) {
     const authReq = req as AuthRequest;
     const { id, name } = authReq.auth;
+    const movieId = req.params.id;
     const body = req.body;
     const { error, value } = movieReviewSchema.validate(body);
     if (error) {
@@ -136,16 +141,18 @@ export class MovieController {
 
     const movieReviewData: MovieReview = value as MovieReview;
     movieReviewData.userId = id;
+    movieReviewData.movieId = movieId;
     movieReviewData.nameOfReviewer = name;
 
     await MovieReviewModel.create(movieReviewData);
-    res.json({ message: "Review saved" });
+    res.json({ message: "Review created" });
   }
 
   static async updateMovieReview(req: Request, res: Response) {
     const authReq = req as AuthRequest;
     const userId = authReq.auth.id;
-    const reviewId = req.params.id;
+    const movieId = req.params.movieId;
+    const reviewId = req.params.reviewId;
     const body = req.body;
 
     const { error, value } = movieReviewSchema.validate(body);
@@ -159,7 +166,7 @@ export class MovieController {
     const review = await MovieReviewModel.findOne({
       where: {
         id: reviewId,
-        movieId: movieReviewData.movieId,
+        movieId,
         userId,
       },
     });

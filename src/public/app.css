@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  font-family: "Noto Sans", sans-serif;
+  padding: 10px;
+}
+
+ul {
+  list-style: none;
+}
+
+table td {
+  min-width: 80px;
+}
+
+table tr td:last-child {
+  text-align: center;
+}
+
+.api-block {
+  background-color: #e9e9e9;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.api-description {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.http-type {
+  font-size: 0.6rem;
+  color: white;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.http-type.http-type-get {
+  background-color: rgb(74, 98, 134);
+}
+
+.http-type.http-type-post {
+  background-color: rgb(95, 62, 88);
+}
+
+.http-type.http-type-put {
+  background-color: rgb(102, 33, 54);
+}
+
+.api-path {
+  margin: 10px 0;
+  letter-spacing: 1px;
+}
+
+.api-param, .body-param-desc {
+  font-weight: bold;
+}
+
+.params-block {
+  margin-left: 20px;
+}
+
+.bracket {
+  margin-left: 5px;
+}
+
+.body-param {
+  margin-left: 20px;
+}
